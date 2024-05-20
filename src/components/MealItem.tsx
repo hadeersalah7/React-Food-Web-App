@@ -1,5 +1,6 @@
 import React from "react";
 import { formatter } from "../util/formatter";
+import Button from "../UI/Button";
 const MealItem = ({ meal }) => {
   return (
     <li className="meal-item">
@@ -12,7 +13,7 @@ const MealItem = ({ meal }) => {
         </div>
         <div>
           <p className="meal-item-actions">
-            <button>Add to cart</button>
+            <Button>Add to cart</Button>
           </p>
         </div>
       </article>
