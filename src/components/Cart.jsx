@@ -11,6 +11,9 @@ const Cart = () => {
     (totalPrice, item) => totalPrice + item.quantity * item.price,
     0,
   );
+  const handleCloseModal = () => {
+    userProgressCtx.hideCart();
+  };
   return (
     <Modal className="cart" open={userProgressCtx.progress === "cart"}>
       <h2>Your Cart</h2>
@@ -22,9 +25,11 @@ const Cart = () => {
         ))}
       </ul>
       <p className="cart-total">{formatter.format(cartTotal)}</p>
-      <p>
-        <Button textOnly>Close</Button>
-        <Button>Proceed to checkout</Button>
+      <p className="modal-actions">
+        <Button textOnly onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button onClick={handleCloseModal}>Proceed to checkout</Button>
       </p>
     </Modal>
   );
