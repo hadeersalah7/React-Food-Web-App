@@ -8,42 +8,47 @@ const CartContext = createContext({
 
 const cartReducer = (state, action) => {
   if (action.type === "Add_Item") {
-    const existingCart = state.items.findIndex(
+    const existingCartItemIndex = state.items.findIndex(
       (item) => item.id === action.item.id,
     );
-    const updatedItems = [...state.items];
-    let exsitingItem = state.items[existingCart];
-    if (existingCart > -1) {
+    const existingCartItem = state.items[existingCartItemIndex];
+    let updatedItems;
+
+    if (existingCartItem) {
       const updatedItem = {
-        ...exsitingItem,
-        quantity: exsitingItem.quantity + 1,
+        ...existingCartItem,
+        quantity: existingCartItem.quantity + 1,
       };
-      updatedItem[existingCart] = updatedItem;
+      updatedItems = [...state.items];
+      updatedItems[existingCartItemIndex] = updatedItem;
     } else {
-      updatedItems.push({ ...action.item, quantity: 1 });
+      updatedItems = [...state.items, { ...action.item, quantity: 1 }];
     }
+
     return { ...state, items: updatedItems };
   }
 
   if (action.type === "Remove_Item") {
-    const existingCart = state.items.findIndex((item) => item.id === action.id);
+    const existingCartItemIndex = state.items.findIndex(
+      (item) => item.id === action.id,
+    );
+    const existingCartItem = state.items[existingCartItemIndex];
+    let updatedItems;
 
-    let exsitingItem = state.items[existingCart];
-
-    const updatedItems = [...state.items];
-
-    if (existingCart === 1) {
-      updatedItems = [...state.items];
-      updatedItems.splice(existingCart, 1);
+    if (existingCartItem.quantity === 1) {
+      updatedItems = state.items.filter((item) => item.id !== action.id);
     } else {
       const updatedItem = {
-        ...exsitingItem,
-        quantity: exsitingItem.quantity - 1,
+        ...existingCartItem,
+        quantity: existingCartItem.quantity - 1,
       };
-      updatedItems[existingCart] = updatedItem;
+      updatedItems = [...state.items];
+      updatedItems[existingCartItemIndex] = updatedItem;
     }
+
     return { ...state, items: updatedItems };
   }
+
   return state;
 };
 
@@ -57,12 +62,13 @@ export const CartContextProvider = ({ children }) => {
   const removeItem = (id) => {
     dispatchCartAction({ type: "Remove_Item", id });
   };
+
   const cartContext = {
     items: cart.items,
     addItem,
     removeItem,
   };
-  console.log(cartContext);
+
   return (
     <CartContext.Provider value={cartContext}>{children}</CartContext.Provider>
   );
