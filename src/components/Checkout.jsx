@@ -16,7 +16,10 @@ const Checkout = () => {
     progressCtx.hideCheckout();
   };
   return (
-    <Modal open={progressCtx.progress === "checkout"}>
+    <Modal
+      open={progressCtx.progress === "checkout"}
+      onClose={handleCloseModal}
+    >
       <form>
         <h2>Checkout</h2>
         <p>Total amount: {formatter.format(cartTotal)}</p>
